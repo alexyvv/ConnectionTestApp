@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="gray_button">#8A8F9F</color>
+    <color name="gray_button_press">#959aa8</color>
+    <color name="red_button">#DD493C</color>
+    <color name="red_button_press">#e05b4f</color>
+    <color name="background_color">#47494E</color>
+    <color name="top_color">#606269</color>
+    <color name="white">#FFF</color>
+
+    <color name="cpb_grey">#ffdedede</color>
+    <color name="cpb_white">@android:color/white</color>
+</resources>

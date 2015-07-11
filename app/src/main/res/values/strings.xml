@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">SSLConnectionTest</string>
+    <string name="text_url">Enter tested host:</string>
+    <string name="text_port">Enter port:</string>
+    <string name="button_connection">test connection</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">HTTP</string>
+    <string name="title_section2">HTTPS</string>
+    <string name="title_section3">Connection</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+</resources>

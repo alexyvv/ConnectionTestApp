@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    signingConfigs {
+        debug {
+            keyAlias 'alfa'
+            keyPassword '123456'
+            storeFile file('/Users/alexy/programming/Android/ApplicationKeySigne/keystore.jks')
+            storePassword '123456'
+        }
+        release {
+            keyAlias 'alfa'
+            keyPassword '123456'
+            storeFile file('/Users/alexy/programming/Android/ApplicationKeySigne/keystore.jks')
+            storePassword '123456'
+        }
+        debugother {
+            keyAlias 'alfa2'
+            keyPassword '123456'
+            storeFile file('/Users/alexy/programming/Android/ApplicationKeySigne/keystore2.jks')
+            storePassword '123456'
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.alexyvv.sslconnectiontest"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
+}

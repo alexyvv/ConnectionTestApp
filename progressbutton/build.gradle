@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    signingConfigs {
+        debug {
+            keyAlias 'alfa'
+            keyPassword '123456'
+            storeFile file('/Users/alexy/programming/Android/ApplicationKeySigne/keystore.jks')
+            storePassword '123456'
+        }
+        debugother {
+            keyAlias 'alfa2'
+            keyPassword '123456'
+            storeFile file('/Users/alexy/programming/Android/ApplicationKeySigne/keystore2.jks')
+            storePassword '123456'
+        }
+    }
+
+    compileSdkVersion 22
+    buildToolsVersion '21.1.2'
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+         debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+// Used to push in maven
+//apply from: '../maven_push.gradle'

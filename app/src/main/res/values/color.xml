@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Color Palette -->
+
+    <color name="primary">#009688</color>
+    <color name="primaryDark">#00796B</color>
+    <color name="accentLight">#B2DFDB</color>
+    <color name="accent">#607D8B</color>
+    <color name="text">#FFFFFF</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#727272</color>
+    <color name="dividerColor">#B6B6B6</color>
+
+</resources>
+
+
