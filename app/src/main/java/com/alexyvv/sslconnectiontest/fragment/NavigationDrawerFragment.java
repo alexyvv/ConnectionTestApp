@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.alexyvv.sslconnectiontest.R;
@@ -37,7 +38,10 @@ public class NavigationDrawerFragment  extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     /** View отображения фрагмента. */
-    private ListView mFragmentView;
+    private LinearLayout mFragmentView;
+
+    /** Компонент отображения списка в drawer-ре. */
+    private ListView mDrawerListView;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -70,8 +74,10 @@ public class NavigationDrawerFragment  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mFragmentView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        mFragmentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mFragmentView = (LinearLayout) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mDrawerListView = (ListView) mFragmentView.findViewById(R.id.drawer_list);
+
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -79,7 +85,7 @@ public class NavigationDrawerFragment  extends Fragment {
             }
         });
 
-        mFragmentView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1,
+        mDrawerListView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
                         getString(R.string.title_section1),
@@ -87,7 +93,7 @@ public class NavigationDrawerFragment  extends Fragment {
                         getString(R.string.title_section3),
                 }));
 
-        mFragmentView.setItemChecked(mCurrentSelectedPosition, true);
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mFragmentView;
     }
 
@@ -124,8 +130,8 @@ public class NavigationDrawerFragment  extends Fragment {
     private void selectItem(int position) {
 
         mCurrentSelectedPosition = position;
-        if (mFragmentView != null) {
-            mFragmentView.setItemChecked(position, true);
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentView);

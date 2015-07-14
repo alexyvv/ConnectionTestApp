@@ -52,8 +52,8 @@ public class TabSlideFragment extends Fragment {
         this.mViewPager.setAdapter(new PageFragmentAdapter(titleNameList, getChildFragmentManager()));
         this.mPagerSlidingTabStrip = (PagerSlidingTabStrip) mFragmentView.findViewById(R.id.pager_sliding_tab);
         this.mPagerSlidingTabStrip.setViewPager(this.mViewPager);
-        this.mPagerSlidingTabStrip.setTextColor(getResources().getColor(R.color.text));
-        this.mPagerSlidingTabStrip.setIndicatorColor(getResources().getColor(R.color.dividerColor));
+        this.mPagerSlidingTabStrip.setTextColor(getResources().getColor(R.color.toolbar_text));
+        this.mPagerSlidingTabStrip.setIndicatorColor(getResources().getColor(R.color.divider_dolor));
     }
 
     /**
