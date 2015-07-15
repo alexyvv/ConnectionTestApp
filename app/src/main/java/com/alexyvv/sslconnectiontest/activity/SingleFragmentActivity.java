@@ -4,14 +4,20 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.alexyvv.sslconnectiontest.R;
-import com.alexyvv.sslconnectiontest.fragment.NavigationDrawerFragment;
+import com.alexyvv.sslconnectiontest.fragment.TabSlideFragment;
+import com.alexyvv.sslconnectiontest.listener.DrawerItemClickListener;
+import com.mikepenz.iconics.typeface.FontAwesome;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 
 /**
  * Created by alexy on 07.07.15.
@@ -19,9 +25,8 @@ import com.alexyvv.sslconnectiontest.fragment.NavigationDrawerFragment;
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     private Toolbar mToolBar;
-
-    /** Fragment managing the behaviors, interactions and presentation of the navigation drawer. */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    /** Кастомный Drawer компонент. */
+    private Drawer mCustomDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,9 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
+
 
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,12 +55,36 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // Drawer
-        // Фрагмент со сдвигающейся панелью:
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_fragment);
-        // Лейаут сдвигающейся панели:
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationDrawerFragment.setUp(drawerLayout, mToolBar);
+        // Drawer (custom implementation)
+        DrawerBuilder drawerBuilder = new DrawerBuilder(this);
+        mCustomDrawer = drawerBuilder
+//                .withRootView(R.id.drawer_container)
+                .withToolbar(mToolBar)
+                .withHeader(R.layout.drawer_header)
+                .withTranslucentStatusBar(true)
+                .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.title_connection).withIcon(FontAwesome.Icon.faw_plug),
+                        new PrimaryDrawerItem().withName(R.string.title_http).withIcon(FontAwesome.Icon.faw_rocket),
+                        new PrimaryDrawerItem().withName(R.string.title_https).withIcon(FontAwesome.Icon.faw_lock),
+                        new PrimaryDrawerItem().withName(R.string.title_connection_info).withIcon(FontAwesome.Icon.faw_info),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName(R.string.title_app_info).withIcon(FontAwesome.Icon.faw_info_circle)
+
+                )
+                .withOnDrawerItemClickListener(new DrawerItemClickListener(this))
+                .withSavedInstance(savedInstanceState)
+                .build();
+    }
+
+    /**
+     * Получить объект компонента Drawer.
+     * @return объект компонента Drawer.
+     */
+    public Drawer getmCustomDrawer(){
+
+        return this.mCustomDrawer;
     }
 
     @Override
@@ -67,9 +99,20 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if(mCustomDrawer != null && mCustomDrawer.isDrawerOpen()) {
+            mCustomDrawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     /**
      * Создание фрагмента.
      * @return единственный фрагмент активности.
      */
     protected abstract Fragment createFragment();
 }
+
