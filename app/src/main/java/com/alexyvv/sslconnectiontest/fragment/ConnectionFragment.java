@@ -1,5 +1,6 @@
 package com.alexyvv.sslconnectiontest.fragment;
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +12,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.view.animation.AnimationUtils;
 
 import com.alexyvv.sslconnectiontest.R;
 import com.alexyvv.sslconnectiontest.common.ContextModel;
 import com.alexyvv.sslconnectiontest.common.TestConnector;
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -27,8 +30,7 @@ public class ConnectionFragment extends Fragment {
     private View mFragmentView;
     private AutoCompleteTextView mHostCompleteText;
     private AutoCompleteTextView mPortCompleteText;
-    private ProgressBar mProgressBar;
-    private Button mTestConnectButton;
+    private FloatingActionButton fabConnect;
 
     /**
      * Получить экземпляр фрагмента.
@@ -74,12 +76,15 @@ public class ConnectionFragment extends Fragment {
 
         setHintAdapterForHosts();
         mPortCompleteText = (AutoCompleteTextView) mFragmentView.findViewById(R.id.comp_text_port);
-        mProgressBar = (ProgressBar) mFragmentView.findViewById(R.id.progress_connection);
-        mProgressBar.setIndeterminate(true);
-        mTestConnectButton = (Button) mFragmentView.findViewById(R.id.button_test_connect);
-        mTestConnectButton.setOnClickListener(new View.OnClickListener() {
+
+        //Floating Action Button:
+        fabConnect = (FloatingActionButton) mFragmentView.findViewById(R.id.fab_connect);
+        fabConnect.setShowAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_up));
+        fabConnect.setHideAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_down));
+        fabConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String host = mHostCompleteText.getText().toString();
                 String port = mPortCompleteText.getText().toString();
                 // Добавляем host и port в модель подсказок:
@@ -88,11 +93,38 @@ public class ConnectionFragment extends Fragment {
                 // Обновляем адаперты подсказок для хоста и порта:
                 setHintAdapterForHosts();
                 setHintAdapterForPorts(host);
-                // Запускаем проверку возможности открытия SSl соединения.
+                // Запускаем проверку возможности открытия соединения.
                 TestConnector connector = new TestConnector(host, port, ConnectionFragment.this);
                 connector.execute();
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fabConnect.show(true);
+            }
+        }, 400);
+
+//        mProgressBar = (ProgressBar) mFragmentView.findViewById(R.id.progress_connection);
+//        mProgressBar.setIndeterminate(true);
+//        mTestConnectButton = (Button) mFragmentView.findViewById(R.id.button_test_connect);
+//        mTestConnectButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String host = mHostCompleteText.getText().toString();
+//                String port = mPortCompleteText.getText().toString();
+//                // Добавляем host и port в модель подсказок:
+//                ContextModel.getInstance().addHostHint(host);
+//                ContextModel.getInstance().addPortHint(host, port);
+//                // Обновляем адаперты подсказок для хоста и порта:
+//                setHintAdapterForHosts();
+//                setHintAdapterForPorts(host);
+//                // Запускаем проверку возможности открытия SSl соединения.
+//                TestConnector connector = new TestConnector(host, port, ConnectionFragment.this);
+//                connector.execute();
+//            }
+//        });
 
         return mFragmentView;
     }
@@ -115,17 +147,17 @@ public class ConnectionFragment extends Fragment {
 
     public void setConnectionProgressState(){
 
-        mTestConnectButton.setEnabled(false);
         mHostCompleteText.setEnabled(false);
         mPortCompleteText.setEnabled(false);
-        mProgressBar.setVisibility(View.VISIBLE);
+        fabConnect.setShowProgressBackground(true);
+        fabConnect.setIndeterminate(true);
     }
 
     public void setCompleteState(){
 
-        mTestConnectButton.setEnabled(true);
         mHostCompleteText.setEnabled(true);
         mPortCompleteText.setEnabled(true);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        fabConnect.setShowProgressBackground(false);
+        fabConnect.setIndeterminate(false);
     }
 }

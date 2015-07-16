@@ -1,87 +1,114 @@
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:elevation="2dp"
     android:layout_gravity="center"
-    card_view:cardUseCompatPadding="true"
+    app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="vertical"
+
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_url"
-            android:textColor="@color/primary_text"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/connection_properties_fields"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_url"
+                    android:textColor="@color/primary_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/text_url"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp" />
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:id="@+id/comp_text_url"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:completionHint="url"
+                    android:inputType="textUri" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/text_port"
+                    android:id="@+id/text_port"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/comp_text_port"
+                    android:textColor="@color/primary_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:completionHint="port"
+                    android:autoText="true"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/scroll_text_output"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/connection_properties_fields"
+                android:layout_alignParentBottom="true"
+                android:background="#CFD8DC"
+                android:fillViewport="true">
+
+                <TextView
+                    android:id="@+id/text_output"
+                    android:elevation="4dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:lines="20"
+                    android:scrollHorizontally="false"
+                    android:scrollbars="vertical"
+                    android:textSize="15sp" />
+            </ScrollView>
+        </RelativeLayout>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_connect"
+            android:layout_margin="5dp"
+            app:layout_anchor="@id/connection_properties_fields"
+            app:layout_anchorGravity="bottom|right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/text_url"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp" />
-
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
-            android:id="@+id/comp_text_url"
-            android:layout_gravity="top"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:completionHint="url"
-            android:inputType="textUri" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/text_port"
-            android:id="@+id/text_port"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/comp_text_port"
-            android:textColor="@color/primary_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:completionHint="port"
-            android:autoText="true"
-            android:inputType="number" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal">
-
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/button_connection"
-                android:id="@+id/button_test_connect" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/progress_connection"
-                android:visibility="invisible"
-                android:layout_gravity="center_vertical|right"
-                android:layout_marginLeft="10dp" />
-        </LinearLayout>
-
-    </LinearLayout>
+            android:elevation="6dp"
+            android:src="@drawable/ic_progress"
+            app:fab_colorNormal="@color/accent"
+            app:fab_colorPressed="@color/accent_light"
+            app:fab_colorRipple="@color/accent_light"
+            app:fab_shadowColor="#000"
+            app:fab_elevationCompat="6dp"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </android.support.design.widget.CoordinatorLayout>
 </android.support.v7.widget.CardView>

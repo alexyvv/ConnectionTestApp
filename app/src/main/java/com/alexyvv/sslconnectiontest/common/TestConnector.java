@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.alexyvv.sslconnectiontest.fragment.ConnectionFragment;
-import com.gc.materialdesign.widgets.SnackBar;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -48,12 +47,12 @@ public class TestConnector extends AsyncTask<Boolean, Void, Boolean> {
 
         if(connectionCompleteFlag) {
             // Соединение установленно
-            SnackBar snackbar = new SnackBar(this.connectionFragment.getActivity(), "Connection is established", "OK", null);
-            snackbar.show();
+//            SnackBar snackbar = new SnackBar(this.connectionFragment.getActivity(), "Connection is established", "OK", null);
+//            snackbar.show();
         } else {
             // Соединение не установленно
-            SnackBar snackbar = new SnackBar(this.connectionFragment.getActivity(), "Connection is NOT established", "OK", null);
-            snackbar.show();
+//            SnackBar snackbar = new SnackBar(this.connectionFragment.getActivity(), "Connection is NOT established", "OK", null);
+//            snackbar.show();
 
         }
         this.connectionFragment.setCompleteState();
