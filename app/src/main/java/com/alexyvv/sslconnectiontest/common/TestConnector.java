@@ -14,10 +14,11 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by alexy on 07.07.15.
  */
-public class TestConnector extends AsyncTask<Boolean, Void, Boolean> {
+public class TestConnector extends AsyncTask<String, Void, String> {
 
-    private static final int CONN_TIMEOUT = 60000;
     private static final String TAG = "HTTPSConnector";
+    private static final String OK_CONNECTION_RESULT = "CONNECTION_OK";
+    private static final int CONN_TIMEOUT = 60000;
     private String url;
     private String port;
 
@@ -37,26 +38,36 @@ public class TestConnector extends AsyncTask<Boolean, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Boolean... params) {
+    protected String doInBackground(String... params) {
 
         return testSocketConnect(this.url, this.port);
     }
 
     @Override
-    protected void onPostExecute(Boolean connectionCompleteFlag) {
+    protected void onPostExecute(String connectionResult) {
 
-        if(connectionCompleteFlag) {
+        if(connectionResult.equalsIgnoreCase(OK_CONNECTION_RESULT)) {
             // Соединение установленно
 //            SnackBar snackbar = new SnackBar(this.connectionFragment.getActivity(), "Connection is established", "OK", null);
 //            snackbar.show();
         } else {
+
             // Соединение не установленно
 //            SnackBar snackbar = new SnackBar(this.connectionFragment.getActivity(), "Connection is NOT established", "OK", null);
 //            snackbar.show();
-
         }
-        this.connectionFragment.setCompleteState();
+        this.connectionFragment.setCompleteState("");
     }
+
+    /**
+     * Завершить проверку соединения в "ручном" режиме.
+     */
+    public void stopTestConnection() {
+
+        this.connectionFragment.setCompleteState("");
+        cancel(false);
+    }
+
 
     /**
      * Проверить соединение по сокету
@@ -64,13 +75,13 @@ public class TestConnector extends AsyncTask<Boolean, Void, Boolean> {
      * @param aPort порт сервера
      * @return <code>true</code> - соединение установленно, <code>false</code> - иначе.
      */
-    public boolean testSocketConnect(String aURL, String aPort) {
+    private String testSocketConnect(String aURL, String aPort) {
 
-        boolean result = false;
+        String result = OK_CONNECTION_RESULT;
         try {
             new Socket(aURL, Integer.parseInt(aPort));
-            result = true;
         } catch (Exception e) {
+            result = e.getMessage();
             Log.d(TAG, e.getMessage(), e);
         }
         return result;

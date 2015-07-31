@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.animation.AnimationUtils;
 
@@ -30,7 +28,11 @@ public class ConnectionFragment extends Fragment {
     private View mFragmentView;
     private AutoCompleteTextView mHostCompleteText;
     private AutoCompleteTextView mPortCompleteText;
-    private FloatingActionButton fabConnect;
+    private FloatingActionButton mFabConnect;
+    private TestConnector mConnector;
+
+    /** Флаг активности проверки соединения: <code>true</code> - идет проверка */
+    private boolean mInProgressFlag = false;
 
     /**
      * Получить экземпляр фрагмента.
@@ -78,53 +80,37 @@ public class ConnectionFragment extends Fragment {
         mPortCompleteText = (AutoCompleteTextView) mFragmentView.findViewById(R.id.comp_text_port);
 
         //Floating Action Button:
-        fabConnect = (FloatingActionButton) mFragmentView.findViewById(R.id.fab_connect);
-        fabConnect.setShowAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_up));
-        fabConnect.setHideAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_down));
-        fabConnect.setOnClickListener(new View.OnClickListener() {
+        mFabConnect = (FloatingActionButton) mFragmentView.findViewById(R.id.fab_connect);
+        mFabConnect.setShowAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_up));
+        mFabConnect.setHideAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_down));
+        mFabConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String host = mHostCompleteText.getText().toString();
-                String port = mPortCompleteText.getText().toString();
-                // Добавляем host и port в модель подсказок:
-                ContextModel.getInstance().addHostHint(host);
-                ContextModel.getInstance().addPortHint(host, port);
-                // Обновляем адаперты подсказок для хоста и порта:
-                setHintAdapterForHosts();
-                setHintAdapterForPorts(host);
-                // Запускаем проверку возможности открытия соединения.
-                TestConnector connector = new TestConnector(host, port, ConnectionFragment.this);
-                connector.execute();
+                if(!mInProgressFlag) {
+                    String host = mHostCompleteText.getText().toString();
+                    String port = mPortCompleteText.getText().toString();
+                    // Добавляем host и port в модель подсказок:
+                    ContextModel.getInstance().addHostHint(host);
+                    ContextModel.getInstance().addPortHint(host, port);
+                    // Обновляем адаперты подсказок для хоста и порта:
+                    setHintAdapterForHosts();
+                    setHintAdapterForPorts(host);
+                    // Запускаем проверку возможности открытия соединения.
+                    mConnector = new TestConnector(host, port, ConnectionFragment.this);
+                    mConnector.execute();
+                } else {
+                    mConnector.stopTestConnection();
+                }
             }
         });
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                fabConnect.show(true);
+                mFabConnect.show(true);
             }
         }, 400);
-
-//        mProgressBar = (ProgressBar) mFragmentView.findViewById(R.id.progress_connection);
-//        mProgressBar.setIndeterminate(true);
-//        mTestConnectButton = (Button) mFragmentView.findViewById(R.id.button_test_connect);
-//        mTestConnectButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String host = mHostCompleteText.getText().toString();
-//                String port = mPortCompleteText.getText().toString();
-//                // Добавляем host и port в модель подсказок:
-//                ContextModel.getInstance().addHostHint(host);
-//                ContextModel.getInstance().addPortHint(host, port);
-//                // Обновляем адаперты подсказок для хоста и порта:
-//                setHintAdapterForHosts();
-//                setHintAdapterForPorts(host);
-//                // Запускаем проверку возможности открытия SSl соединения.
-//                TestConnector connector = new TestConnector(host, port, ConnectionFragment.this);
-//                connector.execute();
-//            }
-//        });
 
         return mFragmentView;
     }
@@ -145,19 +131,34 @@ public class ConnectionFragment extends Fragment {
         mPortCompleteText.setAdapter(portCompleteAdapter);
     }
 
-    public void setConnectionProgressState(){
+    /**
+     * Задать статус фагменту: в процессе проверки соединения.
+     */
+    public void setConnectionProgressState() {
 
+        mInProgressFlag = true;
         mHostCompleteText.setEnabled(false);
         mPortCompleteText.setEnabled(false);
-        fabConnect.setShowProgressBackground(true);
-        fabConnect.setIndeterminate(true);
+        mFabConnect.setShowProgressBackground(true);
+        mFabConnect.setIndeterminate(true);
+        mFabConnect.setImageResource(R.drawable.ic_close);
     }
 
-    public void setCompleteState(){
 
+    /**
+     * Задать статус фагменту: соединение проверено.
+     */
+    public void setCompleteState(String connectMessage) {
+
+        // TODO: записывать лог в формате:
+        // [00:00:00] host:port delay = 0s DONE/FAIL
+        // Error log (if exist)
+
+        mInProgressFlag = false;
         mHostCompleteText.setEnabled(true);
         mPortCompleteText.setEnabled(true);
-        fabConnect.setShowProgressBackground(false);
-        fabConnect.setIndeterminate(false);
+        mFabConnect.setShowProgressBackground(false);
+        mFabConnect.setIndeterminate(false);
+        mFabConnect.setImageResource(R.drawable.ic_progress);
     }
 }
